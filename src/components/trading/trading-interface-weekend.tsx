@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import TradingViewWidget from '../trading-view-widget';
+import WeekendTradingViewWidget from '../trading-view-widget-weekend';
 import Orderbook from '@/components/trading/orderbook';
 import WeekendTradingForm from '@/components/trading/trading-form-weekend';
 import PositionsTable from '@/components/trading/positions-table';
@@ -61,7 +61,7 @@ export default function WeekendTradingInterface({ initialSymbol = 'PYTH:EURUSD' 
         {/* Left column - Chart (50%) */}
         <div className="col-span-6 h-[600px]">
           <div className="h-full border border-gray-200 dark:border-gray-800 rounded-none overflow-hidden">
-            <TradingViewWidget />
+            <WeekendTradingViewWidget />
           </div>
         </div>
         

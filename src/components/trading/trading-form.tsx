@@ -1,6 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 import LeverageSlider from './leverage-slider';
@@ -13,6 +20,13 @@ import { useTransactionToast } from '@/components/use-transaction-toast';
 // Types
 type OrderType = 'market' | 'limit';
 type PositionType = 'long' | 'short';
+type CollateralType = 'USDC' | 'EURC';
+
+interface CollateralOption {
+  value: CollateralType;
+  label: string;
+  icon: string;
+}
 
 const showTxToast = useTransactionToast();
 
@@ -30,7 +44,13 @@ export default function TradingForm({ symbol, currentPrice, onLeverageChange, in
 
   const [orderType, setOrderType] = useState<OrderType>('market');
   const [positionType, setPositionType] = useState<PositionType>('long');
+  const [collateralType, setCollateralType] = useState<CollateralType>('USDC');
   const [amount, setAmount] = useState<string>('100');
+
+  const collateralOptions: CollateralOption[] = [
+    { value: 'USDC', label: 'USDC', icon: '/usdc.svg' },
+    { value: 'EURC', label: 'EURC', icon: '/eurc.svg' },
+  ];
   const [limitPrice, setLimitPrice] = useState<string>(currentPrice.toFixed(5));
   const [estimatedPnL, setEstimatedPnL] = useState<number>(0);
   const [estimatedLiquidationPrice, setEstimatedLiquidationPrice] = useState<number>(0);
@@ -68,7 +88,7 @@ export default function TradingForm({ symbol, currentPrice, onLeverageChange, in
     mutationFn: async () => {
       if (!program) throw new Error('Program not loaded');
       if (!publicKey) throw new Error('Wallet not connected');
-      const orderDetails = `${orderType.toUpperCase()} ${positionType.toUpperCase()} ${amount} ${symbol} @ ${limitPrice}x${leverage}`;
+      const orderDetails = `${orderType.toUpperCase()} ${positionType.toUpperCase()} ${amount} ${collateralType} ${symbol} @ ${limitPrice}x${leverage}`;
 
       console.log("Sending order:", orderDetails);
 
@@ -129,9 +149,45 @@ export default function TradingForm({ symbol, currentPrice, onLeverageChange, in
           </div>
         </div>
 
+        {/* Collateral Type */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Collateral</label>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="w-full flex items-center justify-between px-3 py-2 text-sm border rounded-md">
+              <div className="flex items-center">
+                <Image 
+                  src={collateralOptions.find(option => option.value === collateralType)?.icon || '/usdc.svg'} 
+                  alt={collateralType} 
+                  width={16} 
+                  height={16} 
+                  className="mr-2" 
+                />
+                <span>{collateralType}</span>
+              </div>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-[160px]">
+              {collateralOptions.map((option) => (
+                <DropdownMenuItem 
+                  key={option.value}
+                  onClick={() => setCollateralType(option.value)}
+                  className="cursor-pointer"
+                >
+                  <div className="flex items-center">
+                    <Image src={option.icon} alt={option.label} width={16} height={16} className="mr-2" />
+                    <span>{option.label}</span>
+                  </div>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
         {/* Amount */}
         <div className="mb-4">
-          <label className="block text-sm font-medium">Amount (USDC)</label>
+          <label className="block text-sm font-medium">Amount ({collateralType})</label>
           <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} className="w-full px-3 py-2 border rounded-md" placeholder="Enter amount" />
         </div>
 

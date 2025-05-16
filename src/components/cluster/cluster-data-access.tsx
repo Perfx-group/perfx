@@ -22,6 +22,7 @@ export enum ClusterNetwork {
 // By default, we don't configure the mainnet-beta cluster
 // The endpoint provided by clusterApiUrl('mainnet-beta') does not allow access from the browser due to CORS restrictions
 // To use the mainnet-beta cluster, provide a custom endpoint
+// https://devnet.helius-rpc.com/?api-key=07644a76-50b9-4050-88dc-477fcfbf5a58
 export const defaultClusters: SolanaCluster[] = [
   {
     name: 'devnet',

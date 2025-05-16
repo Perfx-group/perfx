@@ -38,26 +38,14 @@ export default function PositionsTable() {
     symbol: 'EUR/USD',
     type: 'long',
     size: 1000,
-    leverage: 5,
+    leverage: 10,
     entryPrice: 1.20710,
     markPrice: 1.25234,
     liquidationPrice: 1.05325,
     pnl: 12.50,
     pnlPercentage: 1.25,
     margin: 200
-  }, {
-    id: 'pos-2',
-    symbol: 'USD/CHF',
-    type: 'short',
-    size: 500,
-    leverage: 10,
-    entryPrice: 0.91225,
-    markPrice: 0.91125,
-    liquidationPrice: 0.93225,
-    pnl: 5.00,
-    pnlPercentage: 1.00,
-    margin: 50
-  }]);
+  }, ]);
 
   const [orders, setOrders] = useState<Order[]>([{
     id: 'ord-1',

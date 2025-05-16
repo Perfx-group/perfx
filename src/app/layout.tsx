@@ -10,7 +10,9 @@ export const metadata: Metadata = {
 }
 
 const links: { label: string; path: string }[] = [
-  { label: 'Account', path: '/account' }
+  { label: 'Account', path: '/account' },
+  { label: 'Trade', path: '/trade' },
+  { label: 'After-hours', path: '/wtrade' },
 ]
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -27,7 +29,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     </html>
   )
 }
-// Patch BigInt so we can log it using JSON.stringify without any errors
+
 declare global {
   interface BigInt {
     toJSON(): string
